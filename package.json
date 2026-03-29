@@ -3,5 +3,8 @@
   "uuid": "9285a408-5f31-48c4-8566-5a10c80bb948",
   "creator": {
     "version": "3.8.6"
+  },
+  "dependencies": {
+    "awilix": "^13.0.3"
   }
 }

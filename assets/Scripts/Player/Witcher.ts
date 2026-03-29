@@ -2,6 +2,8 @@ import { _decorator, animation, CCBoolean, CCFloat, CircleCollider2D, Collider2D
 import { StateMachine } from '../StateMachine/StateMachine';
 import { WitcherIdleState } from './WitcherIdleState';
 import { WitcherRunState } from './WitcherRunState';
+import { SoundManager } from '../SoundManager';
+import { container } from '../DIContainer';
 const { ccclass, property } = _decorator;
 
 @ccclass('Witcher')
@@ -25,6 +27,9 @@ export class Witcher extends Component {
     public footCollider: CircleCollider2D;
     @property(CCBoolean)
     public isGrounded: boolean;
+
+    public sound: SoundManager;
+
     onLoad() {
         input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
         input.on(Input.EventType.KEY_UP, this.onKeyUp, this);
@@ -56,6 +61,8 @@ export class Witcher extends Component {
         this.stateMachine.AddState("Idle", new WitcherIdleState(this))
         this.stateMachine.AddState("Run", new WitcherRunState(this))
         this.stateMachine.Init()
+
+        this.sound = container.resolve<SoundManager>('Sound');
     }
     onKeyDown(event: EventKeyboard) {
         switch (event.keyCode) {
@@ -91,6 +98,7 @@ export class Witcher extends Component {
         const velocity = this.rb.linearVelocity;
         velocity.y = this.jumpForce;
         this.rb.linearVelocity = velocity;
+        this.sound.playOneShot("Jump");
     }
     move(dt: number) {
         const velocity = this.rb.linearVelocity;
